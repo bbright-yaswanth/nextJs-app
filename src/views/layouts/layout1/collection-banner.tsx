@@ -103,10 +103,11 @@ const CollectionBanner: NextPage = () => {
             {
               categories.map((item) => (
                 <SwiperSlide key={item.id}>
-                  <div className="single-category-one">
-                  <a href="">
-                    <img alt={item.name} loading="lazy" width="120" height="120" decoding="async" data-nimg="1" src={item.img[0]} />
-                    <p>{item.name}</p></a>
+                  <div className="single-category-one height-180">
+                  
+                      <Media src={item.img[0]} className="img-fluid" alt={item.name}/>
+                    
+                    <p>{item.name}</p>
                     </div>
                 </SwiperSlide>
 
