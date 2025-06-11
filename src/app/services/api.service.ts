@@ -7,7 +7,7 @@ const API_URL = 'https://1rpapp.in/v1/fetch-banners';
 const API_BASE_URL = 'https://devqarupeecomservice.rupeecom.in/v1';
 
 const API_PROD_URL = 'https://1rpapp.in/v1';
-const tenant_id = "dxrhudtb";
+const tenant_id = "owuhhrlb";
 
 export interface BannerModel {
   id: string;
