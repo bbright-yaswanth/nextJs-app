@@ -1,10 +1,5 @@
 // StoreBaseDetails.ts
-import { RatingModel } from '../rating/rating';
-
-export interface LatLng {
-  lat: number;
-  lng: number;
-}
+import { RatingModel, LatLng } from '@/app/models/models';
 
 export class StoreBaseDetails {
   name: string;

@@ -1,6 +1,6 @@
 // You will need to implement these classes similarly based on their Dart versions:
-import { DeliveryAddressModel } from './delivery_address';
-import { OrderItemsModel } from './order_item_model';
+import { DeliveryAddressModel } from '../delivery_address_model/delivery_address';
+import { OrderItemsModel } from '../order_item_model/order_item_model';
 export class DeliveryAssign {
   name: string;
   phone: string;

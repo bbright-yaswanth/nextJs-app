@@ -1,70 +1,47 @@
-type DiscountItemType = 'GOOD' | 'KIT' | string;
-
-interface DiscountItem {
-  // You need to define this interface based on your DiscountItem class in Dart
-  type: DiscountItemType;
-  toMap: () => any;
-}
-
-interface DiscountMap {
+import { DiscountItem } from "../models";
+export class Discount {
   id: string;
-  name?: string | null;
-  details?: string | null;
-  active?: boolean | null;
-  img?: string[] | null;
-  discount?: number | null;
-  discount_end_date?: string | null;
-  discount_start_date?: string | null;
-  is_discount_percent?: boolean | null;
-  exclude_users?: string[] | null;
-  creation_time?: string | null;
-  item_specific?: boolean | null;
-  discount_items?: any[] | null;
-}
-
-class Discount {
-  id: string;
-  name?: string | null;
-  details?: string | null;
-  active?: boolean | null;
-  img?: string[] | null;
-  isDiscountPercent?: boolean | null;
-  discountStartDate?: Date | null;
-  excludeUsers?: string[] | null;
-  creationTime?: string | null;
-  itemSpecific?: boolean | null;
-  discount?: number | null;
-  discountItems?: DiscountItem[] | null;
-  discountEndDate?: Date | null;
+  name?: string;
+  details?: string;
+  active?: boolean;
+  img?: string[];
+  isDiscountPercent?: boolean;
+  discountStartDate?: Date;
+  excludeUsers?: string[];
+  creationTime?: string;
+  itemSpecific?: boolean;
+  discount?: number;
+  discountItems?: DiscountItem[];
+  discountEndDate?: Date;
 
   constructor({
     id,
-    name = null,
-    details = null,
-    active = null,
-    img = null,
-    isDiscountPercent = null,
-    discountStartDate = null,
-    excludeUsers = null,
-    creationTime = null,
-    itemSpecific = null,
-    discount = null,
-    discountItems = null,
-    discountEndDate = null,
+    name,
+    details,
+    active,
+    img,
+    isDiscountPercent,
+    discountStartDate,
+    excludeUsers,
+    creationTime,
+    itemSpecific,
+    discount,
+    discountEndDate,
+    discountItems,
   }: {
     id: string;
-    name?: string | null;
-    details?: string | null;
-    active?: boolean | null;
-    img?: string[] | null;
-    isDiscountPercent?: boolean | null;
-    discountStartDate?: Date | null;
-    excludeUsers?: string[] | null;
-    creationTime?: string | null;
-    itemSpecific?: boolean | null;
-    discount?: number | null;
-    discountItems?: DiscountItem[] | null;
-    discountEndDate?: Date | null;
+    name?: string;
+    details?: string;
+    active?: boolean;
+    img?: string[];
+    isDiscountPercent?: boolean;
+    discountStartDate?: Date;
+    excludeUsers?: string[];
+    creationTime?: string;
+    itemSpecific?: boolean;
+    discount?: number;
+    discountEndDate?: Date;
+    discountItems?: DiscountItem[];
   }) {
     this.id = id;
     this.name = name;
@@ -77,58 +54,69 @@ class Discount {
     this.creationTime = creationTime;
     this.itemSpecific = itemSpecific;
     this.discount = discount;
-    this.discountItems = discountItems;
     this.discountEndDate = discountEndDate;
+    this.discountItems = discountItems;
   }
 
-  static fromMap(map: DiscountMap): Discount {
+  toMap(): Record<string, any> {
+    return {
+      id: this.id,
+      name: this.name,
+      details: this.details,
+      active: this.active,
+      img: this.img,
+      discount: this.discount,
+      discount_end_date: this.discountEndDate?.toISOString(),
+      discount_start_date: this.discountStartDate?.toISOString(),
+      is_discount_percent: this.isDiscountPercent,
+      exclude_users: this.excludeUsers,
+      creation_time: this.creationTime,
+      item_specific: this.itemSpecific,
+      discount_items: this.discountItems?.map((item) => item.toMap()),
+    };
+  }
+
+  static fromMap(map: Record<string, any>): Discount {
     return new Discount({
-      id: map.id,
-      name: map.name ?? null,
-      details: map.details ?? null,
-      active: map.active ?? null,
-      img: map.img ? [...map.img] : null,
-      discount: map.discount ?? null,
-      discountEndDate: map.discount_end_date ? new Date(map.discount_end_date) : null,
-      discountStartDate: map.discount_start_date ? new Date(map.discount_start_date) : null,
-      isDiscountPercent: map.is_discount_percent ?? null,
-      excludeUsers: map.exclude_users ? [...map.exclude_users] : null,
-      creationTime: map.creation_time ?? null,
-      itemSpecific: map.item_specific ?? null,
-      discountItems: map.discount_items
-        ? map.discount_items.map((item: any) => DiscountItem.fromMap(item))
-        : null,
+      id: map['id'],
+      name: map['name'],
+      details: map['details'],
+      active: map['active'],
+      img: map['img'] ? [...map['img']] : undefined,
+      discount: map['discount'],
+      discountEndDate: map['discount_end_date'] ? new Date(map['discount_end_date']) : undefined,
+      discountStartDate: map['discount_start_date'] ? new Date(map['discount_start_date']) : undefined,
+      isDiscountPercent: map['is_discount_percent'],
+      excludeUsers: map['exclude_users'] ? [...map['exclude_users']] : undefined,
+      creationTime: map['creation_time'],
+      itemSpecific: map['item_specific'],
+      discountItems: map['discount_items']
+        ? map['discount_items'].map((item: any) => DiscountItem.fromMap(item))
+        : undefined,
     });
   }
 
-  // If you have a DiscountItem class with fromMap, otherwise you'll need to implement it similarly
-  // static DiscountItem.fromMap should exist.
-
-  static fromMapWithNoDiscountEndDate(map: any): Discount {
-    // Same as fromMap but for your custom structure without discountEndDate etc.
+  static fromMapWithNoDiscountEndDate(map: Record<string, any>): Discount {
     return new Discount({
-      id: map.id,
-      name: map.name ?? null,
-      details: map.details ?? null,
-      active: map.active ?? null,
-      img: map.img ?? null,
-      discount: map.discount ?? null,
-      discountEndDate: map.discountEndDate ?? null,
-      discountStartDate: map.discountStartDate ?? null,
-      isDiscountPercent: map.isDiscountPercent ?? null,
-      excludeUsers: map.excludeUsers ?? null,
-      creationTime: map.creationTime ?? null,
-      itemSpecific: map.itemSpecific ?? null,
-      discountItems: map.discount_items
-        ? map.discount_items.map((item: any) => DiscountItem.fromMap(item))
-        : null,
+      id: map['id'],
+      name: map['name'],
+      details: map['details'],
+      active: map['active'],
+      img: map['img'],
+      discount: map['discount'],
+      discountEndDate: map['discountEndDate'],
+      discountStartDate: map['discountStartDate'],
+      isDiscountPercent: map['isDiscountPercent'],
+      excludeUsers: map['excludeUsers'],
+      creationTime: map['creationTime'],
+      itemSpecific: map['itemSpecific'],
+      discountItems: map['discount_items'].map((item: any) => DiscountItem.fromMap(item)),
     });
   }
 
   getDiscountItems(): DiscountItem[] {
-    if (!this.discountItems) return [];
-    return this.discountItems.filter(
-      (item) => item.type === 'GOOD' || item.type === 'KIT'
+    return (
+      this.discountItems?.filter((item) => item.type === 'GOOD' || item.type === 'KIT') ?? []
     );
   }
 
@@ -146,34 +134,15 @@ class Discount {
 
   isDiscountNotExpired(): boolean {
     if (this.isDiscount()) {
+      // You'll need to implement discountNotExpired function in TypeScript
       return discountNotExpired(this.id);
     }
     return false;
   }
 }
 
-// Helper function assumed from your Dart code
+// You'll need to implement this function or import it
 function discountNotExpired(id: string): boolean {
-  // You need to implement this function based on your logic
-  // For now, returning true (or false) as placeholder
-  return true;
-}
-
-// Placeholder DiscountItem class. Replace this with actual implementation.
-class DiscountItem {
-  type: DiscountItemType;
-
-  constructor(type: DiscountItemType) {
-    this.type = type;
-  }
-
-  static fromMap(map: any): DiscountItem {
-    return new DiscountItem(map.type);
-  }
-
-  toMap() {
-    return {
-      type: this.type,
-    };
-  }
+  // Implementation goes here
+  return false;
 }

@@ -1,54 +1,5 @@
-export class TaxModel {
-  id: string;
-  name: string;
-  active: boolean;
-
-  constructor({ id, name, active }: { id: string; name: string; active: boolean }) {
-    this.id = id;
-    this.name = name;
-    this.active = active;
-  }
-
-  static fromMap(map: any): TaxModel {
-    return new TaxModel({
-      id: map.id ?? '',
-      name: map.name ?? '',
-      active: map.active ?? false,
-    });
-  }
-
-  toJson(): Record<string, any> {
-    return {
-      id: this.id,
-      name: this.name,
-      active: this.active,
-    };
-  }
-}
-
-export class CategoryProducts {
-  id: string;
-  name: string;
-
-  constructor({ id, name }: { id: string; name: string }) {
-    this.id = id;
-    this.name = name;
-  }
-
-  static fromMap(map: any): CategoryProducts {
-    return new CategoryProducts({
-      id: map.id ?? '',
-      name: map.name ?? '',
-    });
-  }
-
-  toJson(): Record<string, any> {
-    return {
-      id: this.id,
-      name: this.name,
-    };
-  }
-}
+import { TaxModel } from "../tax_model/tax_model";
+import { CategoryProducts } from "../category_product/category_product";
 
 
 export class Category {
@@ -155,7 +106,7 @@ export class Category {
       tax: this.tax ? this.tax.toJson() : null,
       timingId: this.timingId,
       creationTime: this.creationTime,
-      category_products: this.categoryProducts.map((p) => p.toJson()),
+      category_products: this.categoryProducts,
       isAvailable: this.isAvailable,
     };
   }
@@ -170,6 +121,67 @@ export class Category {
 
   isTaxActive(): boolean {
     return this.taxId.length > 0 && this.tax?.active === true;
+  }
+}
+
+
+// models/CategoryRender.ts
+export class CategoryRender {
+  constructor(
+    public readonly name: string,
+    public readonly viewOption: string,
+    public readonly img: string[], // Assuming images are URLs (strings)
+    public readonly sort: number
+  ) {}
+
+  // Factory method to create from JSON/map
+  public static fromMap(map: Record<string, any>): CategoryRender {
+    return new CategoryRender(
+      map['name'] || '',
+      map['viewOption'] || map['view_option'] || 'grid',
+      Array.isArray(map['img']) ? map['img'] : [],
+      map['sort'] || map['category_sort'] || 0
+    );
+  }
+
+  // Empty/default instance
+  public static empty(): CategoryRender {
+    return new CategoryRender('', 'grid', [], 0);
+  }
+
+  // Convert to plain object (for JSON serialization)
+  public toMap(): Record<string, any> {
+    return {
+      name: this.name,
+      viewOption: this.viewOption,
+      img: this.img,
+      sort: this.sort
+    };
+  }
+
+  // Helper method to get first image or placeholder
+  public getFirstImage(): string {
+    return this.img.length > 0 ? this.img[0] : '/placeholder.jpg';
+  }
+
+  // Clone with overrides
+  public copyWith({
+    name,
+    viewOption,
+    img,
+    sort
+  }: {
+    name?: string;
+    viewOption?: string;
+    img?: string[];
+    sort?: number;
+  }): CategoryRender {
+    return new CategoryRender(
+      name ?? this.name,
+      viewOption ?? this.viewOption,
+      img ?? [...this.img], // Shallow copy array
+      sort ?? this.sort
+    );
   }
 }
 

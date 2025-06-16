@@ -1,14 +1,15 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Col, Media, Row } from "reactstrap";
-import { getCategories, getAllCategories, Category } from '../../../app/services/api.service';
+import { API } from '../../../app/services/api.service';
 import { Grid, Navigation, Pagination, Mousewheel, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/grid";
+import { Category, ObjCache } from "@/app/globalProvider";
 
 
 interface CollectionBannerProps {
@@ -23,8 +24,9 @@ interface Categories {
   category: Category;
 }
 
-var categories: Category[] = [];
 
+   
+    
 const CollectionBannerList: React.FC<Categories> = ({ category }) => {
   return (
     <Col md="4">
@@ -34,8 +36,8 @@ const CollectionBannerList: React.FC<Categories> = ({ category }) => {
         </div>
         <div className="collection-banner-contain">
           <div>
-            <h3>{category.title}</h3>
-            <h4>{category.subTitle}</h4>
+            <h3>{category.name}</h3>
+            <h4>{category.name}</h4>
             <div className="shop">
               <Link href={{ pathname: "/collections/leftsidebar/", query: { category: category.name, }, }} >
                 {category.id}
@@ -49,17 +51,15 @@ const CollectionBannerList: React.FC<Categories> = ({ category }) => {
 };
 
 const CollectionBanner: NextPage = () => {
+  const [categories,setCategories] = useState([]);
 
-  useEffect(() => {
-    // getCategories('ikngosji', '5b547df0-967d-4aa4-8996-e02511c66e26').then((data) => {
-    //   categories = data;
-    // });
-    getAllCategories('ikngosji').then((data) => {
-      categories = data;
-    });
-  }, []);
-  return (
-    <section className="w-full rts-category-area section-py-space">
+
+ ObjCache.categoryList.subscribe((data:any) => {
+      console.log(data)
+      setCategories(data);
+    })
+  return (<>
+    { categories.length && <section className="w-full rts-category-area section-py-space">
       <div className="custom-container">
           
               <h2 className="title-left mb--0">Featured Categories</h2>
@@ -101,7 +101,7 @@ const CollectionBanner: NextPage = () => {
             
           >
             {
-              categories.map((item) => (
+              categories.map((item:any) => (
                 <SwiperSlide key={item.id}>
                   <div className="single-category-one height-180">
                   
@@ -121,32 +121,12 @@ const CollectionBanner: NextPage = () => {
           </Swiper>
         </div>
       </div>
-    </section>
-  );
+    </section>}
+ </> );
 };
 
 export default CollectionBanner;
 
 
-const items = [
-  {
-    image: "https://i.pravatar.cc/300?img=1",
-    title: "Sarah Johnson",
-    subtitle: "Frontend Developer",
-    handle: "@sarahjohnson",
-    borderColor: "#3B82F6",
-    gradient: "linear-gradient(145deg, #3B82F6, #000)",
-    url: "https://github.com/sarahjohnson"
-  },
-  {
-    image: "https://i.pravatar.cc/300?img=2",
-    title: "Mike Chen",
-    subtitle: "Backend Engineer",
-    handle: "@mikechen",
-    borderColor: "#10B981",
-    gradient: "linear-gradient(180deg, #10B981, #000)",
-    url: "https://linkedin.com/in/mikechen"
-  }
-];
 
 

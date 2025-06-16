@@ -115,3 +115,29 @@ export class BusinessDetails {
     });
   }
 }
+
+export class AppLogo {
+  readonly appLogo: string;
+
+  constructor({ appLogo }: { appLogo: string }) {
+    this.appLogo = appLogo;
+  }
+
+  static fromMap(map: Record<string, any>): AppLogo {
+    return new AppLogo({
+      appLogo: map['logo_image_url'] || '',
+    });
+  }
+
+  static copy(source: AppLogo): AppLogo {
+    return new AppLogo({
+      appLogo: source.appLogo,
+    });
+  }
+
+  static emptyAppLogo(): AppLogo {
+    return new AppLogo({
+      appLogo: '',
+    });
+  }
+}

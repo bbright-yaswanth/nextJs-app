@@ -7,6 +7,7 @@ import Footer from "../../Containers/Footer";
 import HeaderContainer from "../../Containers/Header/header1";
 import TopBrand from "../widgets/TopBrand";
 import Loader from "@/common/Loader";
+import '@/app/globalProvider';
 
 interface Props {
   children: ReactNode;

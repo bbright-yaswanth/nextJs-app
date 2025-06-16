@@ -16,9 +16,21 @@ import RatioSquare from "@/views/layouts/widgets/ratio-square";
 import Category from "@/views/layouts/widgets/roundedCategory";
 import Testimonial from "@/views/layouts/widgets/testimonial";
 import SpecialProduct from "@/views/layouts/widgets/title-section";
+import { centralDataCollector ,CentralDataCollector} from '@/app/services/central_data_control';
+import { useEffect } from "react";
 
+const centralDataCollectorObj: CentralDataCollector = centralDataCollector;
+
+ 
+    
 
 const Home = () => {
+
+   useEffect(() => {
+      centralDataCollectorObj.scheduleGetData()
+    }, []);
+    
+
   return (
     <>
       {/* <NewsLatter /> */}
