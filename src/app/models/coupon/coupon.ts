@@ -1,3 +1,5 @@
+//import { CouponAssignedUsersModel } from "../coupon_assigned_users/coupon_assigned_users";
+
 export interface CouponAssignedUsersModel {
   phone_number: string;
   [key: string]: any;
@@ -10,6 +12,7 @@ export class CouponAssignedUsers implements CouponAssignedUsersModel {
   otherFields: Record<string, any>;
 
   constructor(data: any) {
+    
     this.phone_number = data.phone_number ?? '';
     this.otherFields = { ...data };
   }

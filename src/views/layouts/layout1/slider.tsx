@@ -3,8 +3,8 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import { Col, Media, Row } from "reactstrap";
-import { getAllBanners, BannerModel } from '../../../app/services/api.service';
-
+//import { getAllBanners, BannerModel } from '../../../app/services/api.service';
+import {API, BannerModel, ObjCache } from '@/app/globalProvider'
 // var settings = {
 //   autoplay: true,
 //   autoplaySpeed: 2500,
@@ -61,7 +61,7 @@ interface SliderProps {
 const SlideBanner: React.FC<SliderProps> = ({ data }) => {
   return (
     <section className="w-full section-py-space">
-      <div className="custom-container rts-banner-area-one">
+      <div className="custom-container rts-banner-area-one" >
 
         <Swiper
           spaceBetween={1}
@@ -122,17 +122,14 @@ const SlideBanner: React.FC<SliderProps> = ({ data }) => {
 
 //export default Slider;
 var banners: BannerModel[] = [];
+
 const SliderBanner: NextPage = () => {
-  useEffect(() => {
-    getAllBanners('ikngosji').then((data) => {
-      banners = data;
-    });
-  }, []);
+ 
   return (
     <>
-
-      <SlideBanner data={banners}>
-      </SlideBanner>
+{banners.length && <SlideBanner data={banners}>
+      </SlideBanner>}
+      
 
     </>
   );

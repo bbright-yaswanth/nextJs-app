@@ -1,3 +1,4 @@
+
 interface CouponAssignedUsersJson {
   user_name?: string;
   phone_number: string;
@@ -6,7 +7,7 @@ interface CouponAssignedUsersJson {
   coupon_id?: string;
 }
 
-class CouponAssignedUsersModel {
+export class CouponAssignedUsersModel {
   userName: string;
   phoneNumber: string;
   orderID: string;

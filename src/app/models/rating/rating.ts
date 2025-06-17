@@ -4,6 +4,7 @@ export class RatingModel {
   three: number;
   four: number;
   five: number;
+  
 
   constructor({
     one,

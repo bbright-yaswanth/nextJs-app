@@ -1,6 +1,6 @@
-import { Product } from './Product'; // define or import this
-import { Kit } from './Kit';         // define or import this
-import { OrderKitItems } from './OrderKitItems'; // define or import this
+import { Product } from '../product/product'; // define or import this
+import { Kit } from '../kit/kit';         // define or import this
+import { OrderKitItems } from '../order_kit_items/order_kit_items'; // define or import this
 
 export class CartObject {
   id: string;

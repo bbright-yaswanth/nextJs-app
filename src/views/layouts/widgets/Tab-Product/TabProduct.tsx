@@ -9,7 +9,7 @@ import { CartContext } from "../../../../helpers/cart/cart.context";
 import { WishlistContext } from "../../../../helpers/wishlist/wish.context";
 import { CompareContext } from "../../../../helpers/compare/compare.context";
 import { Skeleton } from "../../../../common/skeleton";
-import { getAllCategories, BannerModel, Category } from '../../../../app/services/api.service';
+import { API, BannerModel, Category } from '@/app/globalProvider';
 
 // Swiper components, modules and styles
 import { Autoplay, Navigation, Pagination, Mousewheel, Keyboard } from "swiper/modules";
@@ -113,11 +113,7 @@ type TabProductProps = {
 var categories: any;
 const TabProduct: NextPage<TabProductProps> = ({ effect }) => {
 
-  useEffect(() => {
-    getAllCategories('ikngosji').then((data) => {
-      categories = data;
-    });
-  }, []);
+  
   const { addToWish } = React.useContext(WishlistContext);
   const { addToCart } = React.useContext(CartContext);
   const { addToCompare } = React.useContext(CompareContext);

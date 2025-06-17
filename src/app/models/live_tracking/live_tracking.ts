@@ -1,7 +1,5 @@
-export interface LatLng {
-  lat: number;
-  lng: number;
-}
+import { LatLng } from "../latlng.model";
+
 
 export class LiveTrackingModel {
   orderId: string;

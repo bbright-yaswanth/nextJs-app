@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+//import { format } from 'date-fns'
 
 export class OrderStatus {
   process?: string;
@@ -64,9 +64,9 @@ export class OrderStatus {
       this.confirm ||
       this.process;
 
-    if (statusTime) {
-      return format(new Date(statusTime), 'MMM d'); // e.g., "Jun 4"
-    }
+    // if (statusTime) {
+    //   return format(new Date(statusTime), 'MMM d'); // e.g., "Jun 4"
+    // }
     return '';
   }
 
