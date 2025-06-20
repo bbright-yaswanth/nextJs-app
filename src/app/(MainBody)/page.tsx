@@ -1,4 +1,5 @@
 "use client";
+
 import NewsLatter from "@/views/Containers/news-letter";
 import Layouts from "@/views/layouts/layout1";
 import CollectionBanner from "@/views/layouts/layout1/collection-banner";
@@ -10,12 +11,13 @@ import TabProduct from "@/views/layouts/widgets/Tab-Product/TabProduct";
 import ContactBanner from "@/views/layouts/widgets/contact-us";
 import DealBanner from "@/views/layouts/widgets/dealBanner";
 import DiscountBanner from "@/views/layouts/widgets/discount-banner";
-import DiscountCoupon from "@/views/layouts/widgets/discountCoupon";
+import PriceRanges from "@/views/layouts/widgets/price_ranges";
 import InstagramSection from "@/views/layouts/widgets/instagram/instagram1";
 import RatioSquare from "@/views/layouts/widgets/ratio-square";
-import Category from "@/views/layouts/widgets/roundedCategory";
+import Category_View from "@/views/layouts/widgets/roundedCategory";
 import Testimonial from "@/views/layouts/widgets/testimonial";
 import SpecialProduct from "@/views/layouts/widgets/title-section";
+<<<<<<< Updated upstream
 import DiscountProducts from "@/views/layouts/layout1/discounts";
 import { centralDataCollector, CentralDataCollector } from '@/app/services/central_data_control';
 import { useEffect, useState } from "react";
@@ -43,6 +45,45 @@ const Home = () => {
       subscription.unsubscribe();
     };
   }, []);
+=======
+import { centralDataCollector, CentralDataCollector } from '@/app/services/central_data_control';
+import { useEffect, useState } from "react";
+import { BannerModel, Category, ObjCache, StorePriceRanges } from "@/app/globalProvider";
+const centralDataCollectorObj: CentralDataCollector = centralDataCollector;
+
+
+
+
+const Home = () => {
+const [categories, setCategories] = useState<Array<Category>>();
+const [allCategories, setAllCategories] = useState<Array<Category>>();
+const [banners, setBanners] = useState<Array<BannerModel>>();
+const [priceRanges, setPriceRanges] = useState<StorePriceRanges>();
+  ObjCache.allCategoryList.subscribe((data: Category[]) => {
+   
+    setCategories(data);
+  });
+
+  ObjCache.allBannersList.subscribe(banners => {
+    setBanners(banners);
+  })
+  ObjCache.allCategoryList.subscribe((data: Category[]) => {
+   
+    setAllCategories(data);
+  });
+  ObjCache.priceRangeStream.subscribe((priceRanges: StorePriceRanges) => {
+    setPriceRanges(priceRanges)
+  })
+
+  
+
+  useEffect(() => {
+
+    centralDataCollectorObj.getData();
+   // centralDataCollectorObj.scheduleGetData()
+  }, []);
+  
+>>>>>>> Stashed changes
 
 
   return (
@@ -50,20 +91,28 @@ const Home = () => {
       {/* <NewsLatter /> */}
       <Layouts>
         <div className="bg-light">
+<<<<<<< Updated upstream
           <SliderBanner />
           {/* <CollectionBanner /> */}
           <DiscountBanner/>
           <TabProduct effect="icon-inline" />
           {/* <CollectionBannerTwo /> */}
           <DiscountProducts products={products}/>
+=======
+          <SliderBanner banners={banners} />
+          <CollectionBanner categories={categories} />
+          {/* <DiscountBanner /> */}
+          <TabProduct effect="icon-inline"  categories={allCategories}/>
+          <CollectionBannerTwo />
+>>>>>>> Stashed changes
           <section className="deal-banner">
             <DealBanner />
           </section>
           <section className="rounded-category">
-            <Category />
+            <Category_View />
           </section>
-          <section className="box-category section-py-space">
-            <DiscountCoupon />
+          <section className="box-category section-py-space" >
+            <PriceRanges  priceRanges={priceRanges}/>
           </section>
           <RatioSquare />
           <CollectionBannerThree />

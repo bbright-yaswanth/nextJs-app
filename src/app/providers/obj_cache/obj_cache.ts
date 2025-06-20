@@ -1,15 +1,28 @@
-import { Product, Kit, Discount, Category, Tags, PriceBetween, KitProduct } from "@/app/models/models";
-import { Subject } from "rxjs";
+import { Product, Kit, Discount, Category, Tags, PriceBetween, KitProduct, BannerModel, StorePriceRanges } from "@/app/models/models";
+import { BehaviorSubject, Subject } from "rxjs";
 
-
+interface allProductsProps{
+  category:string,
+  products:Product[];
+}
 // objCache.ts
 export class ObjCache {
   public static premiumList: Map<string, Product[]> = new Map();
   public static nonPremiumList: Map<string, Product[]> = new Map();
   public static kitList: Kit[] = [];
+  public static allBannersList = new Subject<Array<BannerModel>>();
   public static discountList: Discount[] = [];
+<<<<<<< Updated upstream
   public static discountProducts = new Subject<Discount[]>();
   public static categoryList = new Subject();
+=======
+  public static categoryList = new Subject<Array<Category>>();
+  public static allCategoryList = new Subject<Array<Category>>();
+  public static priceRangeStream = new Subject<StorePriceRanges>();
+  public static allProducstsList = new Subject<allProductsProps>();
+  
+  
+>>>>>>> Stashed changes
   public static tags: Tags = Tags.emptyTags();
   public static refreshControllers: (() => void)[] = [];
 
@@ -30,7 +43,9 @@ export class ObjCache {
     this.discountList= [];
         this.discountProducts.next([])
     //this.categoryList = [];
-    this.categoryList.next([])
+    this.categoryList.complete();
+     this.allCategoryList.complete();
+    this.allBannersList.complete();
     this.tags = Tags.emptyTags();
     this.refreshAllControllers();
   }
@@ -54,7 +69,12 @@ export class ObjCache {
 
   static resetObjCacheCategoryList() {
     //this.categoryList = [];
-    this.categoryList.next([])
+    this.categoryList.complete();
+  }
+
+  static resetObjCacheAllCategoryList() {
+    //this.categoryList = [];
+    this.allCategoryList.complete()
   }
 
   static resetObjCacheTags() {
@@ -78,10 +98,30 @@ export class ObjCache {
     this.discountProducts.next(lst)
   }
 
+  static insertObjCacheAllBannersList(lst: BannerModel[]) {
+    this.allBannersList.next(lst);
+  }
+
   static insertObjCacheCategoryList(lst: Category[]) {
-    //this.categoryList.push(...lst);
     this.categoryList.next(lst);
   }
+
+   static insertObjCacheAllProducts(lst: any) {
+    this.allProducstsList.next(lst);
+  }
+  
+
+  static insertObjCacheAllCategoryList(lst: Category[]) {
+    //this.categoryList.push(...lst);
+   // console.log(lst)
+    this.allCategoryList.next(lst);
+  }
+  static insertObjCachePriceRangeStream(lst: StorePriceRanges) {
+    
+    this.priceRangeStream.next(lst);
+  }
+
+  
 
   static getProductDiscount(id: string): Discount | null {
     for (const discount of this.discountList) {

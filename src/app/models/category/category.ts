@@ -17,7 +17,7 @@ export class Category {
   tax?: TaxModel;
   timingId: string;
   creationTime: string;
-  categoryProducts: CategoryProducts[];
+  category_products: CategoryProducts[];
 
   constructor({
     img,
@@ -34,7 +34,7 @@ export class Category {
     tax,
     timingId,
     creationTime,
-    categoryProducts,
+    category_products,
   }: {
     img: string[];
     name: string;
@@ -50,7 +50,7 @@ export class Category {
     tax?: TaxModel;
     timingId: string;
     creationTime: string;
-    categoryProducts: CategoryProducts[];
+    category_products: CategoryProducts[];
   }) {
     this.img = img;
     this.name = name;
@@ -66,7 +66,7 @@ export class Category {
     this.tax = tax;
     this.timingId = timingId;
     this.creationTime = creationTime;
-    this.categoryProducts = categoryProducts;
+    this.category_products = category_products;
   }
 
   static fromMap(map: any): Category {
@@ -84,7 +84,7 @@ export class Category {
       tax: map.tax ? TaxModel.fromMap(map.tax) : undefined,
       timingId: map.timing_id ?? '',
       creationTime: map.creation_time ?? '',
-      categoryProducts: Array.isArray(map.category_products)
+      category_products: Array.isArray(map.category_products)
         ? map.category_products.map((item: any) => CategoryProducts.fromMap(item))
         : [],
       isAvailable: map.is_available ?? false,
@@ -106,17 +106,17 @@ export class Category {
       tax: this.tax ? this.tax.toJson() : null,
       timingId: this.timingId,
       creationTime: this.creationTime,
-      category_products: this.categoryProducts,
+      category_products: this.category_products,
       isAvailable: this.isAvailable,
     };
   }
 
   getCategoryProducts(): CategoryProducts[] {
-    return this.categoryProducts;
+    return this.category_products;
   }
 
   getCategoryProductsCount(): number {
-    return this.categoryProducts.length;
+    return this.category_products.length;
   }
 
   isTaxActive(): boolean {
