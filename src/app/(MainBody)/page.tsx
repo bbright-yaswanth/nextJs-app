@@ -20,7 +20,7 @@ import SpecialProduct from "@/views/layouts/widgets/title-section";
 import DiscountProducts from "@/views/layouts/layout1/discounts";
 import { centralDataCollector, CentralDataCollector } from '@/app/services/central_data_control';
 import { useEffect, useState } from "react";
-import { BannerModel, Category, Discount, ObjCache, StorePriceRanges } from "../globalProvider";
+import { BannerModel, Category, Discount, ObjCache, StorePriceRanges, objCache } from "../globalProvider";
 import { Subscription } from 'rxjs';
 
 
@@ -34,66 +34,71 @@ const Home = () => {
   const [priceRanges, setPriceRanges] = useState<StorePriceRanges>();
 
   // Subscribe to the Subject
-  const subscription: Subscription = ObjCache.discountProducts.subscribe((data) => {
-    //console.log(" Data received from ObjCache:", data);
+  objCache.on('updateDiscountProducts',(data) => {
+    
     setProducts(data);
   });
 
-    ObjCache.categoryList.subscribe((data: Category[]) => {
+  objCache.on('updateBanners', (newBanners) => {
+    console.log(newBanners)
+    setBanners(newBanners);
+  });
 
-      setCategories(data);
-      
-    });
+  objCache.on('updateCategories',(data: Category[]) => {
 
-    ObjCache.allBannersList.subscribe(banners => {
-      setBanners(banners);
-    })
-    ObjCache.allCategoryList.subscribe((data: Category[]) => {
+    setCategories(data);
 
-      setAllCategories(data);
-      
-    });
-    ObjCache.priceRangeStream.subscribe((priceRanges: StorePriceRanges) => {
-      setPriceRanges(priceRanges)
-    })
+  });
 
+  objCache.on('updateAllBanners',banners => {
+    setBanners(banners);
+  })
+  objCache.on('updateAllCategories', (data: Category[]) => {
 
+    setAllCategories(data);
 
-    useEffect(() => {
-
-      centralDataCollectorObj.getData();
-      centralDataCollectorObj.scheduleGetData()
-    }, []);
+  });
+  objCache.on('UpdatePriceRanges',(priceRanges: StorePriceRanges) => {
+    setPriceRanges(priceRanges)
+  })
 
 
 
-    return (
-      <>
-        {/* <NewsLatter /> */}
-        <Layouts>
-          <div className="bg-light">
-            <SliderBanner banners={banners} />
-             <CollectionBanner categories={categories} />
-             <TabProduct effect="icon-inline" categories={allCategories} />
-            <DiscountBanner />
-            
-            {/* <CollectionBannerTwo /> */}
-            <DiscountProducts products={products} />
-            
-           
-            {/* <DiscountBanner /> */}
-            
-            {/* <CollectionBannerTwo />
+  useEffect(() => {
+
+    centralDataCollectorObj.getData();
+    centralDataCollectorObj.scheduleGetData()
+  }, []);
+
+
+
+  return (
+    <>
+      {/* <NewsLatter /> */}
+      <Layouts>
+        <div className="bg-light">
+          <SliderBanner banners={banners} />
+          <CollectionBanner categories={categories} />
+          <TabProduct effect="icon-inline" categories={allCategories} />
+          <DiscountBanner />
+
+          {/* <CollectionBannerTwo /> */}
+          <DiscountProducts products={products} />
+
+
+          {/* <DiscountBanner /> */}
+
+          {/* <CollectionBannerTwo />
             <section className="deal-banner">
               <DealBanner />
             </section>
             <section className="rounded-category">
               <Category_View />
             </section> */}
-            <section className="box-category section-py-space" >
-              <PriceRanges priceRanges={priceRanges} />
-            </section>
-            {/* <RatioSquare />
+          <section className="box-category section-py-space" >
+            <PriceRanges priceRanges={priceRanges} />
+          </section>
+          {/* <RatioSquare />
             <CollectionBannerThree />
             <HotDeal />
             <section className="testimonial testimonial-inverse">
@@ -104,10 +109,10 @@ const Home = () => {
               <InstagramSection />
             </section>
             <ContactBanner /> */}
-          </div>
-        </Layouts>
-      </>
-    );
-  };
+        </div>
+      </Layouts>
+    </>
+  );
+};
 
 export default Home;

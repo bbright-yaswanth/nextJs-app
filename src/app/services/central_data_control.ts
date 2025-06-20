@@ -12,7 +12,7 @@ import {
   Tags,
   Job,
   StoreAnnounce,
-  ObjCache,
+  objCache,
   DoneDiscount,
   TrackDiscount,
   API
@@ -75,8 +75,8 @@ export class CentralDataCollector {
       const categories = await API.getCategories();
       
       //this.categoryStream.setValue(categories);
-      ObjCache.resetObjCacheCategoryList();
-      ObjCache.insertObjCacheCategoryList(categories);
+      objCache.resetObjCacheCategoryList();
+      objCache.insertObjCacheCategoryList(categories);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -89,8 +89,8 @@ export class CentralDataCollector {
       const categories = await API.getAllCategories();
       
       //this.categoryStream.setValue(categories);
-      ObjCache.resetObjCacheAllCategoryList();
-      ObjCache.insertObjCacheAllCategoryList(categories);
+      objCache.resetObjCacheAllCategoryList();
+      objCache.insertObjCacheAllCategoryList(categories);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -99,8 +99,8 @@ export class CentralDataCollector {
     try {
       const kits = await API.getKits();
       //this.kitStream.setValue(kits);
-      ObjCache.resetObjCacheKitList();
-      ObjCache.insertObjCacheKitList(kits);
+      objCache.resetObjCacheKitList();
+      objCache.insertObjCacheKitList(kits);
     } catch (error) {
       console.error('Error fetching kits:', error);
     }
@@ -115,9 +115,9 @@ export class CentralDataCollector {
     try {
       const premiumData = await API.getPremium();
       //this.premiumStream.setValue(premiumData);
-      ObjCache.resetObjCachePremiumList();
+      objCache.resetObjCachePremiumList();
       premiumData.forEach(([category, products]) => {
-        //ObjCache.insertObjCachePremiumList(category.name, products);
+        //objCache.insertObjCachePremiumList(category.name, products);
       });
     } catch (error) {
       console.error('Error fetching premium data:', error);
@@ -128,7 +128,7 @@ export class CentralDataCollector {
     try {
       const banners = await API.getBanners();
       
-     // ObjCache.insertObjCacheBannerList(banners);
+     // objCache.insertObjCacheBannerList(banners);
     } catch (error) {
       console.error('Error fetching banners:', error);
     }
@@ -138,7 +138,7 @@ export class CentralDataCollector {
     try {
       const banners = await API.getAllBanners();
       
-      ObjCache.insertObjCacheAllBannersList(banners);
+      objCache.insertObjCacheAllBannersList(banners);
     } catch (error) {
       console.error('Error fetching banners:', error);
     }
@@ -157,8 +157,8 @@ export class CentralDataCollector {
     try {
       const allProducts = await API.getAllProducts();
       allProducts.forEach(([category, products]) => {
-        //ObjCache.insertObjCachePremiumList(category.name, products);
-        ObjCache.insertObjCacheAllProducts(category.name,products);
+        //objCache.insertObjCachePremiumList(category.name, products);
+        objCache.insertObjCacheAllProducts(category.name,products);
       });
       
     } catch (error) {
@@ -193,7 +193,7 @@ export class CentralDataCollector {
         // Get.find<SearchPageController>().onInit(); // Implement as needed
       }
 
-      ObjCache.refreshAllControllers();
+      //objCache.refreshAllControllers();
     }
   }
 
@@ -205,7 +205,7 @@ export class CentralDataCollector {
     try {
       const priceRanges = await API.getStorePriceRanges();
       //this.priceRangeStream.setValue(priceRanges);
-       ObjCache.insertObjCachePriceRangeStream(priceRanges);
+       objCache.insertObjCachePriceRangeStream(priceRanges);
     } catch (error) {
       console.error('Error fetching price ranges:', error);
     }
@@ -215,9 +215,9 @@ export class CentralDataCollector {
     try {
       const nonPremiumData = await API.getNonPremium();
       //this.nonPremiumStream.setValue(nonPremiumData);
-      ObjCache.resetObjCacheNonPremiumList();
+      objCache.resetObjCacheNonPremiumList();
       nonPremiumData.forEach(([category, products]) => {
-       // ObjCache.insertObjCacheNonPremiumList(category.name, products);
+       // objCache.insertObjCacheNonPremiumList(category.name, products);
       });
     } catch (error) {
       console.error('Error fetching non-premium products:', error);
@@ -279,8 +279,8 @@ export class CentralDataCollector {
       );
 
      // this.discountLiveData.setValue(notExpiredDiscounts);
-      ObjCache.resetObjCacheDiscountList();
-      ObjCache.insertObjCacheDiscountList(notExpiredDiscounts);
+      objCache.resetObjCacheDiscountList();
+      objCache.insertObjCacheDiscountList(notExpiredDiscounts);
 
       // Update trackers
       notExpiredDiscounts.forEach(discount => {
@@ -301,7 +301,7 @@ export class CentralDataCollector {
         TrackDiscount.removeDiscountDetail(discountId);
         DoneDiscount.addDoneDiscount(discountId);
       });
-      ObjCache.discountProducts.next(notExpiredDiscounts);
+      objCache.discountProducts.next(notExpiredDiscounts);
     } catch (error) {
       console.error('Error fetching discounts:', error);
     }

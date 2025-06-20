@@ -12,58 +12,9 @@ import { WishlistContext } from "../../helpers/wishlist/wish.context";
 import ProductBox from "../layouts/widgets/Product-Box/productbox";
 import CollectionBanner from "./CollectionBanner";
 import { useSearchParams } from "next/navigation";
-import { ObjCache } from "@/app/globalProvider";
+import { objCache } from "@/app/globalProvider";
 import { Discount } from "@/app/models/models";
 
-const GET_PRODUCTS_QUERY = gql`
-  query getProducts(
-    $type: CategoryType!
-    $color: String!
-    $priceMax: Int!
-    $priceMin: Int!
-    $sortBy: ProductSort
-    $indexFrom: Int!
-    $limit: Int!
-  ) {
-    products(
-      type: $type
-      color: $color
-      priceMax: $priceMax
-      priceMin: $priceMin
-      sortBy: $sortBy
-      indexFrom: $indexFrom
-      limit: $limit
-    ) {
-      total
-      hasMore
-      items {
-        id
-        title
-        description
-        type
-        brand
-        category
-        price
-        new
-        sale
-        discount
-        variants {
-          id
-          sku
-          size
-          color
-          image_id
-        }
-        images {
-          image_id
-          id
-          alt
-          src
-        }
-      }
-    }
-  }
-`;
 
 type CollectionProps = {
   cols: any;
@@ -94,33 +45,18 @@ const Collection: NextPage<CollectionProps> = ({ cols, layoutList }) => {
   const searchParams = useSearchParams();
   const discountId = searchParams.get("id");
 
-  useEffect(() => {
-    const subscription = ObjCache.discountProducts.subscribe((data: Discount[]) => {
+  
+    objCache.on('updateDiscountProducts',(data: Discount[]) => {
+      
       if (data && data.length > 0) {
         const foundDiscount = data.find((item: Discount) => item.id === discountId);
         if (foundDiscount) {
           setDiscount(foundDiscount);
         }
+        console.log(foundDiscount)
       }
     });
 
-    return () => {
-      subscription.unsubscribe?.();
-    };
-  }, [discountId]);
-
-  const { loading } = useQuery(GET_PRODUCTS_QUERY, {
-    variables: {
-      type: selectedCategory || "all",
-      color: selectedColor || "",
-      indexFrom: 0,
-      limit: pageLimit,
-      priceMax: selectedPrice?.max ?? 100000,
-      priceMin: selectedPrice?.min ?? 0,
-      brand: selectedBrands || [],
-      sortBy: sortBy,
-    },
-  });
 
   const removeBrand = (val: any) => {
     const temp = [...selectedBrands];
@@ -178,7 +114,7 @@ const Collection: NextPage<CollectionProps> = ({ cols, layoutList }) => {
               {/* Product Grid */}
               <div className={`product-wrapper-grid ${layout}`}>
                 <Row>
-                  {loading ||!discount?.discountItems?.length? (
+                  {!discount?.discountItems?.length? (
                     <Col xs="12">
                       <Skeleton />
                     </Col>

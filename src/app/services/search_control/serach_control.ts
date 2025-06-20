@@ -1,9 +1,9 @@
 
 import { EventEmitter } from 'events';
-import { Kit, Product, Category, Tags, ObjCache } from '@/app/globalProvider'
+import { Kit, Product, Category, Tags, objCache } from '@/app/globalProvider'
 
 
-class SearchPageController extends EventEmitter {
+class SearchPageControl extends EventEmitter {
     // State properties
     kits: Kit[] = [];
     allKits: Kit[] = [];
@@ -108,7 +108,7 @@ class SearchPageController extends EventEmitter {
 
     loadSearchData() {
         this.allProducts = this.getAllProducts();
-        this.allKits = ObjCache.getAllKits();
+        this.allKits = objCache.getAllKits();
         this.kits = [...this.allKits];
         this.products = [...this.allProducts];
         this.allTags = this.getAllTags();
@@ -132,8 +132,8 @@ class SearchPageController extends EventEmitter {
 
     getAllProducts(): Product[] {
         const allProducts: Product[] = [];
-        for (const category of ObjCache.categories) {
-            const products = ObjCache.getCategoryProducts(category.name);
+        for (const category of objCache.categories) {
+            const products = objCache.getCategoryProducts(category.name);
             allProducts.push(...products);
         }
         return allProducts;
@@ -181,15 +181,15 @@ class SearchPageController extends EventEmitter {
     getAllTags(): string[] {
         const allTags = new Set<string>();
 
-        ObjCache.getAllNonPremiumProducts().forEach(product => {
+        objCache.getAllNonPremiumProducts().forEach(product => {
             product.getSearchTags().forEach(tag => allTags.add(tag));
         });
 
-        ObjCache.getAllPremiumProducts().forEach(product => {
+        objCache.getAllPremiumProducts().forEach(product => {
             product.getSearchTags().forEach(tag => allTags.add(tag));
         });
 
-        ObjCache.getAllKits().forEach(kit => {
+        objCache.getAllKits().forEach(kit => {
             kit.getSearchTags().forEach(tag => allTags.add(tag));
         });
 
@@ -257,4 +257,4 @@ class SearchPageController extends EventEmitter {
 }
 
 // Export a singleton instance or create new instances as needed
-export const searchController = new SearchPageController();
+export const searchController = new SearchPageControl();
