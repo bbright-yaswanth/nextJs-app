@@ -49,14 +49,8 @@ export class CentralDataCollector {
 
   private initialize(): void {
     this.resetInitialLoad();
-<<<<<<< Updated upstream
-    this.refreshInterval = parseInt(process.env.NEXT_PUBLIC_REFRESH_INTERVAL || '60');
-    // this.scheduleGetData();
-    // this.getData();
-=======
      this.refreshInterval = parseInt(process.env.NEXT_PUBLIC_REFRESH_INTERVAL || '60');
     // this.getData(); 
->>>>>>> Stashed changes
   }
 
    scheduleGetData(): void { 
@@ -64,10 +58,6 @@ export class CentralDataCollector {
       console.log('Refreshing data');
       await this.getData();
       // await refreshCurrentStore(); // Implement this function as needed
-<<<<<<< Updated upstream
-      // this.scheduleGetData();
-=======
->>>>>>> Stashed changes
     }, this.refreshInterval * 1000);
   }
 
@@ -166,10 +156,10 @@ export class CentralDataCollector {
   public async  getAllProducts(): Promise<void> {
     try {
       const allProducts = await API.getAllProducts();
-      //allProducts.forEach(([category, products]) => {
+      allProducts.forEach(([category, products]) => {
         //ObjCache.insertObjCachePremiumList(category.name, products);
-        ObjCache.insertObjCacheAllProducts(allProducts);
-      //});
+        ObjCache.insertObjCacheAllProducts(category.name,products);
+      });
       
     } catch (error) {
       console.error('Error fetching jobs:', error);

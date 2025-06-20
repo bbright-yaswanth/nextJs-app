@@ -185,30 +185,3 @@ export class CategoryRender {
   }
 }
 
-
-
-/*****USAGe***** */
-// import { Category } from './Category';
-
-// const jsonData = {
-//   name: 'Food',
-//   view_option: 'grid',
-//   view_option_label: 'Grid View',
-//   active: true,
-//   tax_id: 'tax1',
-//   tax_type: 'inclusive',
-//   tax: { id: 'tax1', name: 'GST', active: true },
-//   timing_id: '',
-//   creation_time: '2024-01-01',
-//   id: 'cat123',
-//   img: ['img1.jpg'],
-//   sort: 1,
-//   store_id: 'store01',
-//   category_products: [{ id: 'p1', name: 'Pizza' }],
-//   is_available: true,
-// };
-
-// const category = Category.fromMap(jsonData);
-// console.log(category.isTaxActive()); // true
-
-

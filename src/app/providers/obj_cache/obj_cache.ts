@@ -1,9 +1,9 @@
 import { Product, Kit, Discount, Category, Tags, PriceBetween, KitProduct, BannerModel, StorePriceRanges } from "@/app/models/models";
 import { BehaviorSubject, Subject } from "rxjs";
 
-interface allProductsProps{
-  category:string,
-  products:Product[];
+interface allProductsProps {
+  category: string,
+  products: Product[];
 }
 // objCache.ts
 export class ObjCache {
@@ -12,17 +12,16 @@ export class ObjCache {
   public static kitList: Kit[] = [];
   public static allBannersList = new Subject<Array<BannerModel>>();
   public static discountList: Discount[] = [];
-<<<<<<< Updated upstream
   public static discountProducts = new Subject<Discount[]>();
-  public static categoryList = new Subject();
-=======
+  public static allCategories: Category[] = [];
+  public static categories: Category[] = [];
+  public static allProducts: Map<string, Product> = new Map();
   public static categoryList = new Subject<Array<Category>>();
   public static allCategoryList = new Subject<Array<Category>>();
   public static priceRangeStream = new Subject<StorePriceRanges>();
-  public static allProducstsList = new Subject<allProductsProps>();
-  
-  
->>>>>>> Stashed changes
+  public static allProducstsList = new Subject<Product[]>();
+
+
   public static tags: Tags = Tags.emptyTags();
   public static refreshControllers: (() => void)[] = [];
 
@@ -40,12 +39,14 @@ export class ObjCache {
     this.premiumList.clear();
     this.nonPremiumList.clear();
     this.kitList = [];
-    this.discountList= [];
-        this.discountProducts.next([])
-    //this.categoryList = [];
-    this.categoryList.complete();
-     this.allCategoryList.complete();
-    this.allBannersList.complete();
+    this.discountList = [];
+    this.discountProducts.next([])
+    //this.categories = [];
+    //this.allCategories = [];
+    //this.allProducts = [];
+    //this.categoryList.complete();
+    //  this.allCategoryList.complete();
+    // this.allBannersList.complete();
     this.tags = Tags.emptyTags();
     this.refreshAllControllers();
   }
@@ -68,13 +69,13 @@ export class ObjCache {
   }
 
   static resetObjCacheCategoryList() {
-    //this.categoryList = [];
-    this.categoryList.complete();
+    //this.categories = [];
+    //this.categoryList.complete();
   }
 
   static resetObjCacheAllCategoryList() {
-    //this.categoryList = [];
-    this.allCategoryList.complete()
+    //this.allcategories = [];
+    //this.allCategoryList.complete()
   }
 
   static resetObjCacheTags() {
@@ -103,25 +104,27 @@ export class ObjCache {
   }
 
   static insertObjCacheCategoryList(lst: Category[]) {
+    this.categories = lst;
     this.categoryList.next(lst);
   }
 
-   static insertObjCacheAllProducts(lst: any) {
-    this.allProducstsList.next(lst);
+  static insertObjCacheAllProducts(key: string, lst: Product) {
+    this.allProducts.set(key, lst);
+    //this.allProducstsList.next(lst);
   }
-  
+
 
   static insertObjCacheAllCategoryList(lst: Category[]) {
-    //this.categoryList.push(...lst);
-   // console.log(lst)
+    this.allCategories = lst;
+    // console.log(lst)
     this.allCategoryList.next(lst);
   }
   static insertObjCachePriceRangeStream(lst: StorePriceRanges) {
-    
+
     this.priceRangeStream.next(lst);
   }
 
-  
+
 
   static getProductDiscount(id: string): Discount | null {
     for (const discount of this.discountList) {
@@ -221,10 +224,10 @@ export class ObjCache {
 
     this.premiumList.forEach((products) => {
       for (const p of products) {
-        const matchesDescription = p.description.some(map => 
-          Object.values(map).some(value => 
+        const matchesDescription = p.description.some(map =>
+          Object.values(map).some(value =>
             value.toString().toLowerCase().includes(searchStr)
-        ));
+          ));
 
         const matchProductName = p.name.toLowerCase().includes(searchStr);
 
@@ -243,10 +246,10 @@ export class ObjCache {
 
     this.nonPremiumList.forEach((products) => {
       for (const p of products) {
-        const matchesDescription = p.description.some(map => 
-          Object.values(map).some(value => 
+        const matchesDescription = p.description.some(map =>
+          Object.values(map).some(value =>
             value.toString().toLowerCase().includes(searchStr)
-        ));
+          ));
 
         const matchProductName = p.name.toLowerCase().includes(searchStr);
 
@@ -264,12 +267,12 @@ export class ObjCache {
     const searchStr = str.toLowerCase();
 
     for (const p of this.kitList) {
-      const matchesDescription = p.description.some((map:any) => 
-        Object.values(map).some((value:any) => 
+      const matchesDescription = p.description.some((map: any) =>
+        Object.values(map).some((value: any) =>
           value.toString().toLowerCase().includes(searchStr))
       );
 
-      const matchesKitProduct = p.getKitProducts().some((kitProduct:KitProduct) => 
+      const matchesKitProduct = p.getKitProducts().some((kitProduct: KitProduct) =>
         kitProduct.name.toLowerCase().includes(searchStr)
       );
 
@@ -289,7 +292,7 @@ export class ObjCache {
     // Check kits
     for (const p of this.kitList) {
       const vPrice = p.getPrice();
-      
+
       if (filter.before === -1) {
         if (vPrice <= filter.price) {
           results.push(p);
@@ -303,7 +306,7 @@ export class ObjCache {
     this.premiumList.forEach((products) => {
       for (const p of products) {
         const vPrice = p.getProductPrice();
-        
+
         if (filter.before === -1) {
           if (vPrice <= filter.price) {
             results.push(p);
@@ -318,7 +321,7 @@ export class ObjCache {
     this.nonPremiumList.forEach((products) => {
       for (const p of products) {
         const vPrice = p.getProductPrice();
-        
+
         if (filter.before === -1) {
           if (vPrice <= filter.price) {
             results.push(p);

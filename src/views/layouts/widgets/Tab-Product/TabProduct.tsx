@@ -17,6 +17,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { all } from "axios";
 
 var settings = {
   autoplay: true,
@@ -60,52 +61,10 @@ var settings = {
     },
   ],
 };
-
-const GET_PRODUCTS = gql`
-  query getProducts($type: CategoryType, $limit: Int!) {
-    products(type: $type, limit: $limit) {
-      items {
-        id
-        title
-        type
-        collection {
-          collectionName
-        }
-      }
-    }
-  }
-`;
-
-const GET_COLLECTION = gql`
-  query getCollection($collection: String) {
-    collection(collec: $collection) {
-      id
-      title
-      description
-      type
-      brand
-      category
-      price
-      new
-      sale
-      discount
-      stock
-      variants {
-        id
-        sku
-        size
-        color
-        image_id
-      }
-      images {
-        image_id
-        id
-        alt
-        src
-      }
-    }
-  }
-`;
+interface allProductsProps{
+  category:string,
+  products:Product[];
+}
 
 type TabProductProps = {
   effect?: any;
@@ -113,10 +72,11 @@ type TabProductProps = {
 };
 //var categories: any;
 const TabProduct: NextPage<TabProductProps> = ({ effect ,categories}) => {
-const [allproducts,setAllProducts] = useState<Array<Product>>();
-  ObjCache.allProducstsList.subscribe((products: Product[]) => {
-      setAllProducts(products)
-    })
+const [allproducts,setAllProducts] = useState<allProductsProps>();
+  // ObjCache.allProducstsList.subscribe((products: allProductsProps) => {
+  //     setAllProducts(products);
+  //     console.log(allproducts)
+  //   })
     
   const { addToWish } = React.useContext(WishlistContext);
   const { addToCart } = React.useContext(CartContext);

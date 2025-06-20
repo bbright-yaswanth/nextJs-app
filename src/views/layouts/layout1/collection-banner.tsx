@@ -27,7 +27,7 @@ interface Categories {
 }
 
 interface Props {
-  categories: Category[] | undefined;
+  categories: Category[];
 }
 
 
