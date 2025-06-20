@@ -8,6 +8,7 @@ export class ObjCache {
   public static nonPremiumList: Map<string, Product[]> = new Map();
   public static kitList: Kit[] = [];
   public static discountList: Discount[] = [];
+  public static discountProducts = new Subject<Discount[]>();
   public static categoryList = new Subject();
   public static tags: Tags = Tags.emptyTags();
   public static refreshControllers: (() => void)[] = [];
@@ -26,7 +27,8 @@ export class ObjCache {
     this.premiumList.clear();
     this.nonPremiumList.clear();
     this.kitList = [];
-    this.discountList = [];
+    this.discountList= [];
+        this.discountProducts.next([])
     //this.categoryList = [];
     this.categoryList.next([])
     this.tags = Tags.emptyTags();
@@ -46,7 +48,8 @@ export class ObjCache {
   }
 
   static resetObjCacheDiscountList() {
-    this.discountList = [];
+
+    this.discountProducts.next([])
   }
 
   static resetObjCacheCategoryList() {
@@ -71,7 +74,8 @@ export class ObjCache {
   }
 
   static insertObjCacheDiscountList(lst: Discount[]) {
-    this.discountList.push(...lst);
+    this.discountList = lst;
+    this.discountProducts.next(lst)
   }
 
   static insertObjCacheCategoryList(lst: Category[]) {
