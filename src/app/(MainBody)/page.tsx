@@ -32,7 +32,7 @@ const Home = () => {
   const [allCategories, setAllCategories] = useState<Array<Category>>();
   const [banners, setBanners] = useState<Array<BannerModel>>();
   const [priceRanges, setPriceRanges] = useState<StorePriceRanges>();
-
+useEffect(() => {
   // Subscribe to the Subject
   objCache.on('updateDiscountProducts',(data) => {
     
@@ -62,7 +62,9 @@ const Home = () => {
     setPriceRanges(priceRanges)
   })
 
-
+return () => {
+    };
+  }, []);
 
   useEffect(() => {
 

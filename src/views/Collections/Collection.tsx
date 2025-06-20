@@ -45,7 +45,7 @@ const Collection: NextPage<CollectionProps> = ({ cols, layoutList }) => {
   const searchParams = useSearchParams();
   const discountId = searchParams.get("id");
 
-  
+  useEffect(() => {
     objCache.on('updateDiscountProducts',(data: Discount[]) => {
       
       if (data && data.length > 0) {
@@ -56,8 +56,15 @@ const Collection: NextPage<CollectionProps> = ({ cols, layoutList }) => {
         console.log(foundDiscount)
       }
     });
+    return () => {
+      objCache.off('updateDiscountProducts', ()=>{});
+    };
+  }, []);
 
-
+const handleUserLogin = (userId) => {
+      console.log(`User ${userId} has logged in!`);
+      // Perform actions based on user login, e.g., fetch user-specific data
+    };
   const removeBrand = (val: any) => {
     const temp = [...selectedBrands];
     temp.splice(selectedBrands.indexOf(val), 1);
