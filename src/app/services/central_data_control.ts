@@ -76,7 +76,8 @@ export class CentralDataCollector {
   private initialize(): void {
     this.resetInitialLoad();
     this.refreshInterval = parseInt(process.env.NEXT_PUBLIC_REFRESH_INTERVAL || '60');
-    this.scheduleGetData();
+    // this.scheduleGetData();
+    // this.getData();
   }
 
    scheduleGetData(): void {
@@ -84,7 +85,7 @@ export class CentralDataCollector {
       console.log('Refreshing data');
       await this.getData();
       // await refreshCurrentStore(); // Implement this function as needed
-      this.scheduleGetData();
+      // this.scheduleGetData();
     }, this.refreshInterval * 1000);
   }
 
@@ -222,12 +223,12 @@ export class CentralDataCollector {
     try {
       const result = await API.getDiscounts();
       const hideDiscounts: string[] = [];
-      const userController = new UserController(); // Implement as needed
-      const phoneNumber = userController.loggedInPhoneNumber;
+      // const userController = new UserController(); // Implement as needed
+      // const phoneNumber = userController.loggedInPhoneNumber;
 
-      if (!phoneNumber) {
-        throw new Error('Logged in phone number is null');
-      }
+      // if (!phoneNumber) {
+      //   throw new Error('Logged in phone number is null');
+      // }
 
       // Filter out removed discounts
       const discountsToRemove = Array.from(TrackDiscount.discountsTracker.keys())
@@ -242,12 +243,12 @@ export class CentralDataCollector {
       });
 
       // Filter excluded discounts
-      result.forEach(discount => {
-        if (discount.isDiscountExcludedToPhoneNumber(phoneNumber)) {
-          console.log(`Discount is excluded to this user: ${discount.id}`);
-          hideDiscounts.push(discount.id);
-        }
-      });
+      // result.forEach(discount => {
+      //   if (discount.isDiscountExcludedToPhoneNumber(phoneNumber)) {
+      //     console.log(`Discount is excluded to this user: ${discount.id}`);
+      //     hideDiscounts.push(discount.id);
+      //   }
+      // });
 
       const filteredDiscounts = result.filter(discount =>
         !hideDiscounts.includes(discount.id)
@@ -286,6 +287,7 @@ export class CentralDataCollector {
         TrackDiscount.removeDiscountDetail(discountId);
         DoneDiscount.addDoneDiscount(discountId);
       });
+      ObjCache.discountProducts.next(notExpiredDiscounts);
     } catch (error) {
       console.error('Error fetching discounts:', error);
     }

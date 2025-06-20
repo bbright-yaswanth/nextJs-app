@@ -16,20 +16,34 @@ import RatioSquare from "@/views/layouts/widgets/ratio-square";
 import Category from "@/views/layouts/widgets/roundedCategory";
 import Testimonial from "@/views/layouts/widgets/testimonial";
 import SpecialProduct from "@/views/layouts/widgets/title-section";
-import { centralDataCollector ,CentralDataCollector} from '@/app/services/central_data_control';
-import { useEffect } from "react";
+import DiscountProducts from "@/views/layouts/layout1/discounts";
+import { centralDataCollector, CentralDataCollector } from '@/app/services/central_data_control';
+import { useEffect, useState } from "react";
+import { Discount, ObjCache } from "../globalProvider";
+import { Subscription } from 'rxjs';
 
 const centralDataCollectorObj: CentralDataCollector = centralDataCollector;
 
- 
-    
-
 const Home = () => {
+  const [products, setProducts] = useState<Discount[]>([]);
 
-   useEffect(() => {
-      centralDataCollectorObj.scheduleGetData()
-    }, []);
-    
+  useEffect(() => {
+    // Subscribe to the Subject
+    const subscription: Subscription = ObjCache.discountProducts.subscribe((data) => {
+      console.log(" Data received from ObjCache:", data);
+      setProducts(data);
+    });
+
+    // Initial and scheduled data fetch
+    centralDataCollectorObj.getData();
+    centralDataCollectorObj.scheduleGetData();
+
+    // Clean up subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
 
   return (
     <>
@@ -37,10 +51,11 @@ const Home = () => {
       <Layouts>
         <div className="bg-light">
           <SliderBanner />
-          <CollectionBanner />
-          {/* <DiscountBanner /> */}
+          {/* <CollectionBanner /> */}
+          <DiscountBanner/>
           <TabProduct effect="icon-inline" />
-          <CollectionBannerTwo />
+          {/* <CollectionBannerTwo /> */}
+          <DiscountProducts products={products}/>
           <section className="deal-banner">
             <DealBanner />
           </section>
