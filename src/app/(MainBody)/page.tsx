@@ -82,7 +82,7 @@ return () => {
           <SliderBanner banners={banners} />
           <CollectionBanner categories={categories} />
           <TabProduct effect="icon-inline" categories={allCategories} />
-          <DiscountBanner />
+          {/* <DiscountBanner /> */}
 
           {/* <CollectionBannerTwo /> */}
           <DiscountProducts products={products} />

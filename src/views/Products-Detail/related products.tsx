@@ -52,46 +52,11 @@ var settings = {
   ],
 };
 
-const GET_PRODUCTS = gql`
-  query getProducts($type: String!, $id: Int!) {
-    relatedProducts(type: $type, id: $id) {
-      id
-      title
-      description
-      type
-      brand
-      category
-      price
-      new
-      sale
-      discount
-      variants {
-        id
-        sku
-        size
-        color
-        image_id
-      }
-      images {
-        image_id
-        id
-        alt
-        src
-      }
-    }
-  }
-`;
-
 const RelatedProducts: NextPage = () => {
   const { addToWish } = React.useContext(WishlistContext);
   const { addToCart } = React.useContext(CartContext);
   const { addToCompare } = React.useContext(CompareContext);
-  var { loading, data } = useQuery(GET_PRODUCTS, {
-    variables: {
-      type: "fashion",
-      id: 1,
-    },
-  });
+  var loading, data ;
 
   return (
     <section className="section-big-py-space  ratio_asos bg-light">
