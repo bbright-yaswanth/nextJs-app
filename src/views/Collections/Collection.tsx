@@ -14,7 +14,7 @@ import CollectionBanner from "./CollectionBanner";
 import { useSearchParams } from "next/navigation";
 import { ObjCache } from "@/app/globalProvider";
 import { Discount } from "@/app/models/models";
-
+import { useRouter } from "next/navigation";
 const GET_PRODUCTS_QUERY = gql`
   query getProducts(
     $type: CategoryType!
@@ -78,19 +78,18 @@ const Collection: NextPage<CollectionProps> = ({ cols, layoutList }) => {
     selectedPrice,
     setSelectedColor,
     setSelectedBrands,
-    setLeftSidebarOpen,
-    leftSidebarOpen,
+    
   } = useContext(FilterContext);
   const { addToCart } = useContext(CartContext);
   const { addToWish } = useContext(WishlistContext);
   const { addToCompare } = useContext(CompareContext);
   const [grid, setGrid] = useState(cols);
   const [sortBy, setSortBy] = useState("ASC_ORDER");
-  const [pageLimit, setPageLimit] = useState(10);
+  const [pageLimit, setPageLimit] = useState(5);
   const [layout, setLayout] = useState(layoutList);
   const [discount, setDiscount] = useState<Discount>();
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   const searchParams = useSearchParams();
   const discountId = searchParams.get("id");
 
@@ -185,7 +184,7 @@ const Collection: NextPage<CollectionProps> = ({ cols, layoutList }) => {
                   ) : (
                     discount.discountItems.slice(0, pageLimit).map((item: any, i: number) => (
                       <div className={grid} key={i}>
-                        <div className="product">
+                        <div className="product" >
                           <ProductBox
                             layout="layout-one"
                             data={item}

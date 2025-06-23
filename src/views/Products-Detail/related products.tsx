@@ -10,6 +10,10 @@ import { CartContext } from "../../helpers/cart/cart.context";
 import { WishlistContext } from "../../helpers/wishlist/wish.context";
 import { CompareContext } from "../../helpers/compare/compare.context";
 
+interface RelatedProductsProps {
+  productId: string; // coming as a string from URL
+}
+
 var settings = {
   arrows: false,
   dots: false,
@@ -82,16 +86,22 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const RelatedProducts: NextPage = () => {
+const RelatedProducts: NextPage<{ productId: string }> = ({ productId }) => {
   const { addToWish } = React.useContext(WishlistContext);
   const { addToCart } = React.useContext(CartContext);
   const { addToCompare } = React.useContext(CompareContext);
-  var { loading, data } = useQuery(GET_PRODUCTS, {
+
+
+  const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
       type: "fashion",
-      id: 1,
+      id: productId,
     },
   });
+
+  if (error) {
+    console.error("GraphQL error:", error.message);
+  }
 
   return (
     <section className="section-big-py-space  ratio_asos bg-light">

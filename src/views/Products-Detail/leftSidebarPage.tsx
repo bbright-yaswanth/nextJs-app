@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NextPage } from "next";
 import { Row, Col } from "reactstrap";
 import Sidebar from "../../views/Products-Detail/sidebar";
@@ -15,7 +15,7 @@ interface LeftSidebar {
 }
 
 const GET_SINGLE_PRODUCTS = gql`
-  query getProducts($id: Float!) {
+  query getProducts($id: String!) {
     product(id: $id) {
       id
       title
@@ -46,11 +46,33 @@ const GET_SINGLE_PRODUCTS = gql`
 const LeftSidebarPage: NextPage<LeftSidebar> = ({ pathId }) => {
   const filterContext = useContext(FilterContext);
   const { filterOpen, setFilterOpen } = filterContext;
-  var { loading, data } = useQuery(GET_SINGLE_PRODUCTS, {
+
+   // ✅ Log what we're passing to GraphQL
+  console.log("🔍 Type of pathId:", typeof pathId);
+  console.log("🔍 Value of pathId:", pathId);
+
+  var { loading, data, error } = useQuery(GET_SINGLE_PRODUCTS, {
     variables: {
-      id: parseInt(pathId),
+      id:pathId,
     },
   });
+ 
+ 
+  useEffect(() => {
+    if (!loading) {
+      console.log(" Fetched GraphQL data:", data);
+    }
+
+    if (error) {
+      console.error(" GraphQL Error:", error.message);
+      console.error("Full GraphQL Error Object:", error);
+    }
+  }, [loading, data, error]);
+
+  if (error) return <p>Error loading product: {error.message}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (!data?.product) return <p>No product found.</p>;
+
   return (
     <div className="collection-wrapper">
       {data && data.product && !loading && (
