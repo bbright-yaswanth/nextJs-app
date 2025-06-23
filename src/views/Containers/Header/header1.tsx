@@ -42,24 +42,31 @@ const Header: NextPage<header> = ({ cartPopupPosition, display, category, layout
     <Fragment>
       <header id="stickyHeader">
         <div className="mobile-fix-option"></div>
-        <TopBar />
+        {/* <TopBar /> */}
         <div className="layout-header2">
           <Container>
             <Row>
               <Col md="12">
                 <div className="main-menu-block">
-                  <div onClick={() => { setLeftMenu(!leftMenu); document.body.style.overflow = "hidden"; }}
-                    className="sm-nav-block" >
-                    <span className="sm-nav-btn">
-                      <i className="fa fa-bars"></i>
-                    </span>
+                  <div className="header-left">
+                    <div onClick={() => { setLeftMenu(!leftMenu); document.body.style.overflow = "hidden"; }}
+                      className="sm-nav-block" >
+                      <span className="sm-nav-btn">
+                        <i className="fa fa-bars"></i>
+                      </span>
+                    </div>
+
+                    <div className="logo-block">
+                      <a href="/#">
+                        <Media src={`/images/${layoutLogo}/logo/logo.png`} className="img-fluid" alt="logo" />
+                      </a>
+                    </div>
                   </div>
-                  <div className="logo-block">
-                    <a href="/#">
-                      <Media src={`/images/${layoutLogo}/logo/logo.png`} className="img-fluid" alt="logo" />
-                    </a>
+                  <div className="input-block">
+                    <div className="input-box">
+                      <Search />
+                    </div>
                   </div>
-                  <Search />
                   <ShoppingCart position={cartPopupPosition} cartDisplay={display} layout="layout2" />
                 </div>
               </Col>

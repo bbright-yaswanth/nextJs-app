@@ -56,6 +56,13 @@ var settings = {
   ],
 };
 
+
+const RelatedProducts: NextPage = () => {
+  const { addToWish } = React.useContext(WishlistContext);
+  const { addToCart } = React.useContext(CartContext);
+  const { addToCompare } = React.useContext(CompareContext);
+  var loading, data ;
+    
 const GET_PRODUCTS = gql`
   query getProducts($type: String!, $id: Int!) {
     relatedProducts(type: $type, id: $id) {
@@ -86,18 +93,6 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const RelatedProducts: NextPage<{ productId: string }> = ({ productId }) => {
-  const { addToWish } = React.useContext(WishlistContext);
-  const { addToCart } = React.useContext(CartContext);
-  const { addToCompare } = React.useContext(CompareContext);
-
-
-  const { loading, error, data } = useQuery(GET_PRODUCTS, {
-    variables: {
-      type: "fashion",
-      id: productId,
-    },
-  });
 
   if (error) {
     console.error("GraphQL error:", error.message);

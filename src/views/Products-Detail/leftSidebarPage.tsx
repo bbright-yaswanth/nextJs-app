@@ -14,6 +14,7 @@ interface LeftSidebar {
   pathId: any;
 }
 
+
 const GET_SINGLE_PRODUCTS = gql`
   query getProducts($id: String!) {
     product(id: $id) {
@@ -43,35 +44,12 @@ const GET_SINGLE_PRODUCTS = gql`
   }
 `;
 
+
 const LeftSidebarPage: NextPage<LeftSidebar> = ({ pathId }) => {
   const filterContext = useContext(FilterContext);
   const { filterOpen, setFilterOpen } = filterContext;
 
-   // ✅ Log what we're passing to GraphQL
-  console.log("🔍 Type of pathId:", typeof pathId);
-  console.log("🔍 Value of pathId:", pathId);
-
-  var { loading, data, error } = useQuery(GET_SINGLE_PRODUCTS, {
-    variables: {
-      id:pathId,
-    },
-  });
- 
- 
-  useEffect(() => {
-    if (!loading) {
-      console.log(" Fetched GraphQL data:", data);
-    }
-
-    if (error) {
-      console.error(" GraphQL Error:", error.message);
-      console.error("Full GraphQL Error Object:", error);
-    }
-  }, [loading, data, error]);
-
-  if (error) return <p>Error loading product: {error.message}</p>;
-  if (loading) return <p>Loading...</p>;
-  if (!data?.product) return <p>No product found.</p>;
+  var  loading, data ;
 
   return (
     <div className="collection-wrapper">
